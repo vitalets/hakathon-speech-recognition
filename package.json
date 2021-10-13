@@ -7,7 +7,7 @@
     "tsc": "tsc --noEmit",
     "test": "mocha -r ts-node/register test/setup.ts test/specs/*.ts",
     "test:l": "LOG_LEVEL=info npm t",
-    "check": "ts-node test/check",
+    "check": "ts-node scripts/check",
     "build": "rm -rf dist && tsc -p tsconfig.build.json",
     "deploy": "npm run lint && npm run build && deploy-fn"
   },

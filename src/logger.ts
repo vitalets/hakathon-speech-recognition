@@ -2,15 +2,14 @@
  * Logger
  */
 import consoleLogLevel, { LogLevelNames } from 'console-log-level';
-
-const logLevel = process.env.LOG_LEVEL || 'info';
+import { config } from './config';
 
 export class Logger {
   logger: consoleLogLevel.Logger;
 
   constructor(prefix = '') {
     prefix = prefix ? `[${prefix}]` : '';
-    this.logger = consoleLogLevel({ prefix, level: logLevel as LogLevelNames });
+    this.logger = consoleLogLevel({ prefix, level: config.logLevel as LogLevelNames });
   }
 
   error(e: Error) {

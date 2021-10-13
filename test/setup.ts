@@ -1,7 +1,10 @@
 process.env.LOG_LEVEL = process.env.LOG_LEVEL || 'warn';
 
 import assert from 'assert';
+import { config } from '../src/config';
 import { handler } from '../src/serverless';
+
+config.googleUseMocks = true;
 
 type Assert = typeof assert.strict;
 type CallHandler = typeof callHandler;
@@ -18,16 +21,12 @@ Object.assign(global, {
 
 async function callHandler(
   httpMethod: string,
-  path: string,
-  query?: Record<string, string>,
-  body?: Record<string, unknown>
+  queryStringParameters: Record<string, string> = {}
 ) {
   const event = {
     httpMethod,
-    path,
-    queryStringParameters: query || {},
+    queryStringParameters,
     isBase64Encoded: false,
-    body: body ? JSON.stringify(body) : '',
   };
   const res = await handler(event, {
     requestId: 'xxx',

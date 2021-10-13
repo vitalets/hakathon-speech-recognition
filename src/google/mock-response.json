@@ -1,0 +1,720 @@
+{
+  "results": [
+    {
+      "alternatives": [
+        {
+          "words": [
+            {
+              "startTime": {
+                "seconds": "0",
+                "nanos": 200000000
+              },
+              "endTime": {
+                "seconds": "1",
+                "nanos": 300000000
+              },
+              "word": "высказывайте",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "1",
+                "nanos": 300000000
+              },
+              "endTime": {
+                "seconds": "1",
+                "nanos": 500000000
+              },
+              "word": "своё",
+              "confidence": 0.6846588850021362,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "1",
+                "nanos": 500000000
+              },
+              "endTime": {
+                "seconds": "1",
+                "nanos": 600000000
+              },
+              "word": "мнение",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "1",
+                "nanos": 600000000
+              },
+              "endTime": {
+                "seconds": "2",
+                "nanos": 200000000
+              },
+              "word": "оно",
+              "confidence": 0.5472330451011658,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "2",
+                "nanos": 200000000
+              },
+              "endTime": {
+                "seconds": "2",
+                "nanos": 500000000
+              },
+              "word": "очень",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "2",
+                "nanos": 500000000
+              },
+              "endTime": {
+                "seconds": "2",
+                "nanos": 600000000
+              },
+              "word": "для",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "2",
+                "nanos": 600000000
+              },
+              "endTime": {
+                "seconds": "2",
+                "nanos": 700000000
+              },
+              "word": "нас",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "2",
+                "nanos": 700000000
+              },
+              "endTime": {
+                "seconds": "3",
+                "nanos": 100000000
+              },
+              "word": "важно",
+              "confidence": 0.6819865703582764,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "3",
+                "nanos": 100000000
+              },
+              "endTime": {
+                "seconds": "3",
+                "nanos": 300000000
+              },
+              "word": "но",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "3",
+                "nanos": 300000000
+              },
+              "endTime": {
+                "seconds": "3",
+                "nanos": 400000000
+              },
+              "word": "а",
+              "confidence": 0.672639787197113,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "3",
+                "nanos": 400000000
+              },
+              "endTime": {
+                "seconds": "3",
+                "nanos": 500000000
+              },
+              "word": "теперь",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "3",
+                "nanos": 500000000
+              },
+              "endTime": {
+                "seconds": "3",
+                "nanos": 900000000
+              },
+              "word": "Артём",
+              "confidence": 0.7478724718093872,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "3",
+                "nanos": 900000000
+              },
+              "endTime": {
+                "seconds": "4",
+                "nanos": 300000000
+              },
+              "word": "прошёл",
+              "confidence": 0.6114652752876282,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "4",
+                "nanos": 300000000
+              },
+              "endTime": {
+                "seconds": "4",
+                "nanos": 600000000
+              },
+              "word": "Вам",
+              "confidence": 0.7866834402084351,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "4",
+                "nanos": 600000000
+              },
+              "endTime": {
+                "seconds": "4",
+                "nanos": 800000000
+              },
+              "word": "слово",
+              "confidence": 0.6154477596282959,
+              "speakerTag": 0
+            }
+          ],
+          "transcript": "высказывайте своё мнение оно очень для нас важно но а теперь Артём прошёл Вам слово",
+          "confidence": 0.8011530637741089
+        }
+      ],
+      "channelTag": 0,
+      "languageCode": "ru-ru"
+    },
+    {
+      "alternatives": [
+        {
+          "words": [
+            {
+              "startTime": {
+                "seconds": "7",
+                "nanos": 100000000
+              },
+              "endTime": {
+                "seconds": "8",
+                "nanos": 0
+              },
+              "word": "Добрый",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "8",
+                "nanos": 0
+              },
+              "endTime": {
+                "seconds": "8",
+                "nanos": 200000000
+              },
+              "word": "день",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "8",
+                "nanos": 200000000
+              },
+              "endTime": {
+                "seconds": "8",
+                "nanos": 600000000
+              },
+              "word": "мы",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "8",
+                "nanos": 600000000
+              },
+              "endTime": {
+                "seconds": "9",
+                "nanos": 100000000
+              },
+              "word": "посмотрели",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "9",
+                "nanos": 100000000
+              },
+              "endTime": {
+                "seconds": "9",
+                "nanos": 900000000
+              },
+              "word": "один",
+              "confidence": 0.6026720404624939,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "9",
+                "nanos": 900000000
+              },
+              "endTime": {
+                "seconds": "10",
+                "nanos": 400000000
+              },
+              "word": "из",
+              "confidence": 0.7959635257720947,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "10",
+                "nanos": 400000000
+              },
+              "endTime": {
+                "seconds": "10",
+                "nanos": 900000000
+              },
+              "word": "прогнозов",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "10",
+                "nanos": 900000000
+              },
+              "endTime": {
+                "seconds": "11",
+                "nanos": 0
+              },
+              "word": "на",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "11",
+                "nanos": 0
+              },
+              "endTime": {
+                "seconds": "11",
+                "nanos": 600000000
+              },
+              "word": "ближайшие",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "11",
+                "nanos": 600000000
+              },
+              "endTime": {
+                "seconds": "12",
+                "nanos": 0
+              },
+              "word": "25",
+              "confidence": 0.711016058921814,
+              "speakerTag": 0
+            },
+            {
+              "startTime": {
+                "seconds": "12",
+                "nanos": 0
+              },
+              "endTime": {
+                "seconds": "12",
+                "nanos": 0
+              },
+              "word": "лет.",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 0
+            }
+          ],
+          "transcript": " Добрый день мы посмотрели один из прогнозов на ближайшие 25 лет.",
+          "confidence": 0.884701669216156
+        }
+      ],
+      "channelTag": 0,
+      "languageCode": "ru-ru"
+    },
+    {
+      "alternatives": [
+        {
+          "words": [
+            {
+              "startTime": {
+                "seconds": "0",
+                "nanos": 200000000
+              },
+              "endTime": {
+                "seconds": "1",
+                "nanos": 300000000
+              },
+              "word": "высказывайте",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 1
+            },
+            {
+              "startTime": {
+                "seconds": "1",
+                "nanos": 300000000
+              },
+              "endTime": {
+                "seconds": "1",
+                "nanos": 500000000
+              },
+              "word": "своё",
+              "confidence": 0.6846588850021362,
+              "speakerTag": 1
+            },
+            {
+              "startTime": {
+                "seconds": "1",
+                "nanos": 500000000
+              },
+              "endTime": {
+                "seconds": "1",
+                "nanos": 600000000
+              },
+              "word": "мнение",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 1
+            },
+            {
+              "startTime": {
+                "seconds": "1",
+                "nanos": 600000000
+              },
+              "endTime": {
+                "seconds": "2",
+                "nanos": 200000000
+              },
+              "word": "оно",
+              "confidence": 0.5472330451011658,
+              "speakerTag": 1
+            },
+            {
+              "startTime": {
+                "seconds": "2",
+                "nanos": 200000000
+              },
+              "endTime": {
+                "seconds": "2",
+                "nanos": 500000000
+              },
+              "word": "очень",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 1
+            },
+            {
+              "startTime": {
+                "seconds": "2",
+                "nanos": 500000000
+              },
+              "endTime": {
+                "seconds": "2",
+                "nanos": 600000000
+              },
+              "word": "для",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 1
+            },
+            {
+              "startTime": {
+                "seconds": "2",
+                "nanos": 600000000
+              },
+              "endTime": {
+                "seconds": "2",
+                "nanos": 700000000
+              },
+              "word": "нас",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 1
+            },
+            {
+              "startTime": {
+                "seconds": "2",
+                "nanos": 700000000
+              },
+              "endTime": {
+                "seconds": "3",
+                "nanos": 100000000
+              },
+              "word": "важно",
+              "confidence": 0.6819865703582764,
+              "speakerTag": 1
+            },
+            {
+              "startTime": {
+                "seconds": "3",
+                "nanos": 100000000
+              },
+              "endTime": {
+                "seconds": "3",
+                "nanos": 300000000
+              },
+              "word": "но",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 1
+            },
+            {
+              "startTime": {
+                "seconds": "3",
+                "nanos": 300000000
+              },
+              "endTime": {
+                "seconds": "3",
+                "nanos": 400000000
+              },
+              "word": "а",
+              "confidence": 0.672639787197113,
+              "speakerTag": 1
+            },
+            {
+              "startTime": {
+                "seconds": "3",
+                "nanos": 400000000
+              },
+              "endTime": {
+                "seconds": "3",
+                "nanos": 500000000
+              },
+              "word": "теперь",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 1
+            },
+            {
+              "startTime": {
+                "seconds": "3",
+                "nanos": 500000000
+              },
+              "endTime": {
+                "seconds": "3",
+                "nanos": 900000000
+              },
+              "word": "Артём",
+              "confidence": 0.7478724718093872,
+              "speakerTag": 1
+            },
+            {
+              "startTime": {
+                "seconds": "3",
+                "nanos": 900000000
+              },
+              "endTime": {
+                "seconds": "4",
+                "nanos": 300000000
+              },
+              "word": "прошёл",
+              "confidence": 0.6114652752876282,
+              "speakerTag": 1
+            },
+            {
+              "startTime": {
+                "seconds": "4",
+                "nanos": 300000000
+              },
+              "endTime": {
+                "seconds": "4",
+                "nanos": 600000000
+              },
+              "word": "Вам",
+              "confidence": 0.7866834402084351,
+              "speakerTag": 1
+            },
+            {
+              "startTime": {
+                "seconds": "4",
+                "nanos": 600000000
+              },
+              "endTime": {
+                "seconds": "4",
+                "nanos": 800000000
+              },
+              "word": "слово",
+              "confidence": 0.6154477596282959,
+              "speakerTag": 1
+            },
+            {
+              "startTime": {
+                "seconds": "7",
+                "nanos": 100000000
+              },
+              "endTime": {
+                "seconds": "8",
+                "nanos": 0
+              },
+              "word": "Добрый",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 2
+            },
+            {
+              "startTime": {
+                "seconds": "8",
+                "nanos": 0
+              },
+              "endTime": {
+                "seconds": "8",
+                "nanos": 200000000
+              },
+              "word": "день",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 2
+            },
+            {
+              "startTime": {
+                "seconds": "8",
+                "nanos": 200000000
+              },
+              "endTime": {
+                "seconds": "8",
+                "nanos": 600000000
+              },
+              "word": "мы",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 2
+            },
+            {
+              "startTime": {
+                "seconds": "8",
+                "nanos": 600000000
+              },
+              "endTime": {
+                "seconds": "9",
+                "nanos": 100000000
+              },
+              "word": "посмотрели",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 2
+            },
+            {
+              "startTime": {
+                "seconds": "9",
+                "nanos": 100000000
+              },
+              "endTime": {
+                "seconds": "9",
+                "nanos": 900000000
+              },
+              "word": "один",
+              "confidence": 0.6026720404624939,
+              "speakerTag": 2
+            },
+            {
+              "startTime": {
+                "seconds": "9",
+                "nanos": 900000000
+              },
+              "endTime": {
+                "seconds": "10",
+                "nanos": 400000000
+              },
+              "word": "из",
+              "confidence": 0.7959635257720947,
+              "speakerTag": 2
+            },
+            {
+              "startTime": {
+                "seconds": "10",
+                "nanos": 400000000
+              },
+              "endTime": {
+                "seconds": "10",
+                "nanos": 900000000
+              },
+              "word": "прогнозов",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 2
+            },
+            {
+              "startTime": {
+                "seconds": "10",
+                "nanos": 900000000
+              },
+              "endTime": {
+                "seconds": "11",
+                "nanos": 0
+              },
+              "word": "на",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 2
+            },
+            {
+              "startTime": {
+                "seconds": "11",
+                "nanos": 0
+              },
+              "endTime": {
+                "seconds": "11",
+                "nanos": 600000000
+              },
+              "word": "ближайшие",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 2
+            },
+            {
+              "startTime": {
+                "seconds": "11",
+                "nanos": 600000000
+              },
+              "endTime": {
+                "seconds": "12",
+                "nanos": 0
+              },
+              "word": "25",
+              "confidence": 0.711016058921814,
+              "speakerTag": 2
+            },
+            {
+              "startTime": {
+                "seconds": "12",
+                "nanos": 0
+              },
+              "endTime": {
+                "seconds": "12",
+                "nanos": 0
+              },
+              "word": "лет.",
+              "confidence": 0.9527583122253418,
+              "speakerTag": 2
+            }
+          ],
+          "transcript": "",
+          "confidence": 0
+        }
+      ],
+      "channelTag": 0,
+      "languageCode": ""
+    }
+  ],
+  "totalBilledTime": {
+    "seconds": "15",
+    "nanos": 0
+  }
+}

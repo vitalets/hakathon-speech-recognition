@@ -2,10 +2,9 @@ export type ServerlessEvent = ServerlessHttpEvent;
 
 export interface ServerlessHttpEvent {
   httpMethod: string;
-  path: string;
   queryStringParameters: Record<string, string>;
-  body: string;
   isBase64Encoded: boolean;
+  body?: string;
 }
 
 export interface ServerlessContext {
@@ -19,7 +18,7 @@ export interface ServerlessContext {
 export interface ReqInfo {
   requestId: string;
   version: string;
-  path: string;
+  method: string;
   query: Record<string, string>;
   iamToken: string;
 }
