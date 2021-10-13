@@ -26,6 +26,7 @@ export async function startRecognition(fileName: string) {
   const inputConfig = buildRecognitionConfig();
   const uri = `gs://${BUCKET}/${fileName}`;
   const audio = { uri };
+  // todo: better replace file ext
   const outputConfig = { gcsUri: uri.replace(/\.mp3$/i, '.json') };
   const request = { audio, config: inputConfig, outputConfig };
   logger.log(`Starting recognize: ${uri}`);

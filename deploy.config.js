@@ -5,7 +5,7 @@ module.exports = {
   folderId: env.YC_FOLDER_ID,
   functionName: 'hakathon-recognition',
   deploy: {
-    files: [ 'package*.json', 'dist/**/*.js', '.env.google.json' ],
+    files: [ 'package*.json', 'dist/**', '.env.google.json' ],
     handler: 'dist/serverless/index.handler',
     runtime: 'nodejs16-preview',
     timeout: 30,
