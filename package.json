@@ -1,0 +1,36 @@
+{
+  "name": "hakathon-speech-recognition",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint src test --ext .ts",
+    "tsc": "tsc --noEmit",
+    "test": "mocha -r ts-node/register test/setup.ts test/specs/*.ts",
+    "test:l": "LOG_LEVEL=info npm t",
+    "check": "ts-node test/check",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "deploy": "npm run lint && npm run build && deploy-fn"
+  },
+  "lint-staged": {
+    "{src,test}/**/*.ts": "eslint --ext .ts --fix"
+  },
+  "dependencies": {
+    "@google-cloud/speech": "^4.9.0",
+    "console-log-level": "^1.4.1"
+  },
+  "devDependencies": {
+    "@types/console-log-level": "^1.4.2",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.9.0",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-mocha": "^9.0.0",
+    "lint-staged": "^11.1.2",
+    "mocha": "^9.1.2",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.2",
+    "yandex-cloud-deploy-fn": "^1.0.1"
+  },
+  "license": "MIT"
+}
