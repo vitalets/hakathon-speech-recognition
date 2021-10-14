@@ -61,7 +61,7 @@ export async function checkOperation(operationId: string) {
   if (!operationId) throw new Error(`Empty operationId`);
   logger.log(`Checking operation: ${operationId}`);
   const { done, result, error, metadata } = config.googleUseMocks
-    ? await mockCheckLongRunningRecognizeProgress()
+    ? await mockCheckLongRunningRecognizeProgress(operationId)
     : await client.checkLongRunningRecognizeProgress(operationId);
   logger.log(`Operation status: ${JSON.stringify({ done, error })}`);
   if (error) throw new Error(error.message);
@@ -74,16 +74,20 @@ export async function checkOperation(operationId: string) {
 }
 
 async function mockLongRunningRecognize() {
-  return [ { name: 'fake-operaion-id', error: null } ];
+  return [ { name: `fake-id-${Date.now()}`, error: null } ];
 }
 
-async function mockCheckLongRunningRecognizeProgress() {
+async function mockCheckLongRunningRecognizeProgress(operationId: string) {
+  const matches = operationId.match(/(\d+)/);
+  const startTime = matches ? Number(matches[1]) : 0;
+  const progressDuration = 5 * 1000;
+  const done = startTime ? (Date.now() - startTime) > progressDuration : false;
   return {
-    done: true,
+    done,
     error: null,
     metadata: {
-      progressPercent: 100,
+      progressPercent: done ? 100 : 42,
     },
-    result: mockResult
+    result: done ? mockResult : null,
   };
 }
