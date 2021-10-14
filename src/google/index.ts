@@ -8,6 +8,7 @@ import { google } from '@google-cloud/speech/build/protos/protos';
 import { logger } from '../logger';
 import { config } from '../config';
 import mockResult from './mock-response.json';
+import path from 'path';
 
 const { AudioEncoding } = google.cloud.speech.v1p1beta1.RecognitionConfig;
 type ILongRunningRecognizeResponse = google.cloud.speech.v1p1beta1.ILongRunningRecognizeResponse;
@@ -24,10 +25,9 @@ const client = new v1p1beta1.SpeechClient({ keyFilename: config.googleAuthFile }
 export async function startRecognition(fileName: string) {
   if (!fileName) throw new Error(`Empty file`);
   const inputConfig = buildRecognitionConfig();
-  const uri = `gs://${BUCKET}/${fileName}`;
+  const uri = getStorageUrl(fileName);
   const audio = { uri };
-  // todo: better replace file ext
-  const outputConfig = { gcsUri: uri.replace(/\.mp3$/i, '.json') };
+  const outputConfig = { gcsUri: getStorageUrl(changeFileExtension(fileName, '.json')) };
   const request = { audio, config: inputConfig, outputConfig };
   logger.log(`Starting recognize: ${uri}`);
   const [ operation ] = config.googleUseMocks
@@ -52,6 +52,14 @@ function buildRecognitionConfig() {
     enableSpeakerDiarization: true,
     enableWordConfidence: true,
   };
+}
+
+function getStorageUrl(fileName: string) {
+  return `gs://${BUCKET}/${fileName}`;
+}
+
+function changeFileExtension(fileName: string, ext: string) {
+  return path.format({ ...path.parse(fileName), base: undefined, ext });
 }
 
 /**
