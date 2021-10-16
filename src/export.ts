@@ -1,5 +1,5 @@
 import { google } from '@google-cloud/speech/build/protos/protos';
-import { Document, HeadingLevel, Paragraph, Packer } from 'docx';
+import { Document, HeadingLevel, Paragraph, Packer, AlignmentType } from 'docx';
 import { replaceFileExtension } from './utils';
 import * as storage from './google/storage';
 
@@ -48,7 +48,10 @@ function buildDocx(blocks: SpeakerBlock[]) {
       text: `Спикер ${speakerTag}`,
       heading: HeadingLevel.HEADING_2,
     }));
-    children.push(new Paragraph(words.join(' ')));
+    children.push(new Paragraph({
+      text: words.join(' '),
+      alignment: AlignmentType.JUSTIFIED,
+    }));
   });
   const doc = new Document({
     sections: [{ children }]
