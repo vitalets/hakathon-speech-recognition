@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@google-cloud/speech": "^4.9.0",
+    "@google-cloud/storage": "^5.15.3",
     "console-log-level": "^1.4.1"
   },
   "devDependencies": {
