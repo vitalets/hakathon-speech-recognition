@@ -8,7 +8,7 @@ import { google } from '@google-cloud/speech/build/protos/protos';
 import { logger } from '../logger';
 import { config } from '../config';
 import mockResult from './mock-response.json';
-import path from 'path';
+import { changeFileExtension } from '../utils';
 
 const { AudioEncoding } = google.cloud.speech.v1p1beta1.RecognitionConfig;
 type ILongRunningRecognizeResponse = google.cloud.speech.v1p1beta1.ILongRunningRecognizeResponse;
@@ -41,27 +41,6 @@ export async function startRecognition(fileName: string) {
   };
 }
 
-function buildRecognitionConfig() {
-  return {
-    encoding: AudioEncoding.MP3,
-    sampleRateHertz: 44100,
-    languageCode: 'ru-RU',
-    model: 'default',
-    // maxAlternatives: 2,
-    enableAutomaticPunctuation: true,
-    enableSpeakerDiarization: true,
-    enableWordConfidence: true,
-  };
-}
-
-function getStorageUrl(fileName: string) {
-  return `gs://${BUCKET}/${fileName}`;
-}
-
-function changeFileExtension(fileName: string, ext: string) {
-  return path.format({ ...path.parse(fileName), base: undefined, ext });
-}
-
 /**
  * See: https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations
  */
@@ -79,6 +58,23 @@ export async function checkOperation(operationId: string) {
     ? (result as ILongRunningRecognizeResponse).results?.pop()?.alternatives![0].words
     : [];
   return { done, percent, words };
+}
+
+function buildRecognitionConfig() {
+  return {
+    encoding: AudioEncoding.MP3,
+    sampleRateHertz: 44100,
+    languageCode: 'ru-RU',
+    model: 'default',
+    // maxAlternatives: 2,
+    enableAutomaticPunctuation: true,
+    enableSpeakerDiarization: true,
+    enableWordConfidence: true,
+  };
+}
+
+function getStorageUrl(fileName: string) {
+  return `gs://${BUCKET}/${fileName}`;
 }
 
 async function mockLongRunningRecognize() {
