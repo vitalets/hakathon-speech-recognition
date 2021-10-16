@@ -1,44 +1,40 @@
 /**
  * Examples:
  * https://github.com/googleapis/nodejs-speech/blob/main/samples/betaFeatures.js
- *
  */
+import path from 'path';
 import { v1p1beta1 } from '@google-cloud/speech';
 import { google } from '@google-cloud/speech/build/protos/protos';
 import { logger } from '../logger';
 import { config } from '../config';
-import mockResult from './mock-response.json';
-import { changeFileExtension } from '../utils';
+import * as mock from './mock';
+import * as storage from './storage';
+import { replaceFileExtension } from '../utils';
 
 const { AudioEncoding } = google.cloud.speech.v1p1beta1.RecognitionConfig;
 type ILongRunningRecognizeResponse = google.cloud.speech.v1p1beta1.ILongRunningRecognizeResponse;
 type ILongRunningRecognizeMetadata = google.cloud.speech.v1p1beta1.ILongRunningRecognizeMetadata;
 
-const BUCKET = config.googleBucket;
 const client = new v1p1beta1.SpeechClient({ keyFilename: config.googleAuthFile });
 
 /**
  * See: https://cloud.google.com/speech-to-text/docs/reference/rest/v1p1beta1/speech/longrunningrecognize
- * @param uri e.g. gs://bucket/audio.mp3
  */
 // eslint-disable-next-line max-statements
 export async function startRecognition(fileName: string) {
   if (!fileName) throw new Error(`Empty file`);
   const inputConfig = buildRecognitionConfig();
-  const uri = getStorageUrl(fileName);
+  const uri = storage.getInternalUrl(fileName);
   const audio = { uri };
-  const outputConfig = { gcsUri: getStorageUrl(changeFileExtension(fileName, '.json')) };
-  const request = { audio, config: inputConfig, outputConfig };
+  const request = { audio, config: inputConfig };
   logger.log(`Starting recognize: ${uri}`);
   const [ operation ] = config.googleUseMocks
-    ? await mockLongRunningRecognize()
+    ? await mock.longRunningRecognize()
     : await client.longRunningRecognize(request);
   const { error, name } = operation;
   if (error) throw new Error(error.message);
   logger.log(`Operation id: ${name}`);
-  return {
-    operationId: name,
-  };
+  return { operationId: name };
 }
 
 /**
@@ -48,16 +44,13 @@ export async function checkOperation(operationId: string) {
   if (!operationId) throw new Error(`Empty operationId`);
   logger.log(`Checking operation: ${operationId}`);
   const { done, result, error, metadata } = config.googleUseMocks
-    ? await mockCheckLongRunningRecognizeProgress(operationId)
+    ? await mock.checkLongRunningRecognizeProgress(operationId)
     : await client.checkLongRunningRecognizeProgress(operationId);
   logger.log(`Operation status: ${JSON.stringify({ done, error })}`);
   if (error) throw new Error(error.message);
-  const percent = (metadata as ILongRunningRecognizeMetadata).progressPercent;
-  const words = done
-    // See: https://github.com/googleapis/nodejs-speech/blob/b775dd15ba3a8fec8f86edfc5a4a95def452e65e/samples/betaFeatures.js#L115
-    ? (result as ILongRunningRecognizeResponse).results?.pop()?.alternatives![0].words
-    : [];
-  return { done, percent, words };
+  const { uri, progressPercent: percent } = metadata as ILongRunningRecognizeMetadata;
+  const resultUrl = done ? await saveResult(result as ILongRunningRecognizeResponse, uri!) : '';
+  return { done, percent, resultUrl };
 }
 
 function buildRecognitionConfig() {
@@ -73,25 +66,13 @@ function buildRecognitionConfig() {
   };
 }
 
-function getStorageUrl(fileName: string) {
-  return `gs://${BUCKET}/${fileName}`;
-}
-
-async function mockLongRunningRecognize() {
-  return [ { name: `fake-id-${Date.now()}`, error: null } ];
-}
-
-async function mockCheckLongRunningRecognizeProgress(operationId: string) {
-  const matches = operationId.match(/(\d+)/);
-  const startTime = matches ? Number(matches[1]) : 0;
-  const progressDuration = 5 * 1000;
-  const done = startTime ? (Date.now() - startTime) > progressDuration : false;
-  return {
-    done,
-    error: null,
-    metadata: {
-      progressPercent: done ? 100 : 42,
-    },
-    result: done ? mockResult : null,
-  };
+async function saveResult(result: ILongRunningRecognizeResponse, uri: string) {
+  // Use last result (as it contains speakers)
+  // See: https://github.com/googleapis/nodejs-speech/blob/b775dd15ba3a8fec8f86edfc5a4a95def452e65e/samples/betaFeatures.js#L115
+  const words = result.results?.pop()?.alternatives![0].words;
+  const content = JSON.stringify(words, null, 2);
+  const fileName = replaceFileExtension(path.basename(uri), '.json');
+  return config.googleUseMocks
+    ? mock.getResultPublicUrl()
+    : storage.save(content, fileName);
 }

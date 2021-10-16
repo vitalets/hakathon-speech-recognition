@@ -1,24 +1,57 @@
-import fs from 'fs';
 import { google } from '@google-cloud/speech/build/protos/protos';
-import { changeFileExtension } from './utils';
+import { Document, HeadingLevel, Paragraph, Packer } from 'docx';
+import { replaceFileExtension } from './utils';
+import * as storage from './google/storage';
 
 type IWordInfo = google.cloud.speech.v1p1beta1.IWordInfo;
 
-export async function exportToDoc(words: IWordInfo[], fileName: string) {
-  const text = buildText(words);
-  const filePath = `data/${changeFileExtension(fileName, '.txt')}`;
-  await fs.promises.writeFile(filePath, text);
-  return { filePath };
+export interface SpeakerBlock {
+  speakerTag: number;
+  words: string[];
 }
 
-function buildText(words: IWordInfo[]) {
-  const result: string[] = [];
-  let curSpeakerTag: IWordInfo['speakerTag'];
-  words.forEach(({ word, speakerTag }) => {
-    if (!word) return;
-    if (curSpeakerTag !== speakerTag) result.push(`\n\n[cпикер ${speakerTag}]\n\n`);
-    result.push(word);
-    curSpeakerTag = speakerTag;
+export async function exportToDoc(fileName: string) {
+  const content = await storage.download(replaceFileExtension(fileName, '.json'));
+  const words = JSON.parse(content);
+  const blocks = buildSpeakerBlocks(words);
+  const buffer = await buildDocx(blocks);
+  const url = await storage.save(buffer, replaceFileExtension(fileName, '.docx'));
+  return { url };
+}
+
+// eslint-disable-next-line complexity, max-statements
+function buildSpeakerBlocks(words: IWordInfo[]) {
+  const result: SpeakerBlock[] = [];
+  let curSpeakerBlock: SpeakerBlock | undefined;
+  for (let { word, speakerTag } of words) {
+    if (!word) continue;
+    speakerTag = speakerTag || 0;
+    if (!curSpeakerBlock) curSpeakerBlock = { speakerTag, words: [] };
+    if (curSpeakerBlock.speakerTag !== speakerTag) {
+      result.push(curSpeakerBlock);
+      curSpeakerBlock = { speakerTag, words: [] };
+    }
+    curSpeakerBlock.words.push(word);
+  }
+  if (curSpeakerBlock) result.push(curSpeakerBlock);
+  return result;
+}
+
+// function buildTxt(blocks: SpeakerBlock[]) {
+//   return blocks.map(({ speakerTag, words }) => `[спикер ${speakerTag}]\n\n${words.join(' ')}`).join('\n\n');
+// }
+
+function buildDocx(blocks: SpeakerBlock[]) {
+  const children: Paragraph[] = [];
+  blocks.forEach(({ speakerTag, words }) => {
+    children.push(new Paragraph({
+      text: `Спикер ${speakerTag}`,
+      heading: HeadingLevel.HEADING_2,
+    }));
+    children.push(new Paragraph(words.join(' ')));
   });
-  return result.join(' ');
+  const doc = new Document({
+    sections: [{ children }]
+  });
+  return Packer.toBuffer(doc);
 }

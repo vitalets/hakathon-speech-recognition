@@ -17,7 +17,8 @@
   "dependencies": {
     "@google-cloud/speech": "^4.9.0",
     "@google-cloud/storage": "^5.15.3",
-    "console-log-level": "^1.4.1"
+    "console-log-level": "^1.4.1",
+    "docx": "^7.1.1"
   },
   "devDependencies": {
     "@types/console-log-level": "^1.4.2",

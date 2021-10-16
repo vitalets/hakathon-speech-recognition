@@ -1,7 +1,7 @@
 /**
  * Logic entry
  */
-import { startRecognition, checkOperation } from './google';
+import { startRecognition, checkOperation } from './google/speech';
 import { exportToDoc } from './export';
 import { ReqInfo } from './serverless/types';
 
@@ -19,7 +19,7 @@ const routes = [
   {
     method: 'POST',
     action: 'export',
-    handler: (query: ReqInfo['query']) => exportHandler(query.operationId, query.file)
+    handler: (query: ReqInfo['query']) => exportToDoc(query.file)
   },
 ];
 
@@ -31,11 +31,4 @@ export async function handleRequest({ method, query }: ReqInfo) {
     }
   }
   throw new Error(`No route for: method=${method} action=${action}`);
-}
-
-// todo: fetch from static
-async function exportHandler(operationId: string, file: string) {
-  const { done, words } = await checkOperation(operationId);
-  if (!done) throw new Error('Operation not done.');
-  return exportToDoc(words!, file);
 }
