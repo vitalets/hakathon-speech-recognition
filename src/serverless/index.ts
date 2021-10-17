@@ -1,6 +1,7 @@
 /**
  * Serverless function invoke.
  */
+// import contentDisposition from 'content-disposition';
 import { handleRequest } from '..';
 import { logger } from '../logger';
 import { ServerlessContext, ServerlessEvent, ServerlessHttpEvent, ReqInfo } from './types';
@@ -8,10 +9,9 @@ import { ServerlessContext, ServerlessEvent, ServerlessHttpEvent, ReqInfo } from
 export async function handler(event: ServerlessEvent, slsContext: ServerlessContext) {
   const reqInfo = getRequestInfo(event, slsContext);
   logRequest(reqInfo);
-  //const resBody = await handleRequest(reqInfo, reqBody);
   const resBody = await handleRequest(reqInfo);
   logResponse(resBody);
-  return buildHttpResponse(resBody);
+  return buildJsonResponse(resBody);
 }
 
 // function getRequestBody(event: ServerlessEvent): unknown {
@@ -44,7 +44,7 @@ function isHttpRequest(event: ServerlessEvent): event is ServerlessHttpEvent {
   return Boolean((event as ServerlessHttpEvent).httpMethod);
 }
 
-function buildHttpResponse(json: unknown) {
+function buildJsonResponse(json: unknown) {
   return {
     statusCode: 200,
     headers: {
@@ -54,6 +54,18 @@ function buildHttpResponse(json: unknown) {
     body: JSON.stringify(json),
   };
 }
+
+// function buildBinaryResponse(buffer: Buffer, fileName: string) {
+//   return {
+//     statusCode: 200,
+//     headers: {
+//       'Content-Type': 'application/octet-stream',
+//       'Content-Disposition': contentDisposition(fileName),
+//     },
+//     isBase64Encoded: false,
+//     body: buffer,
+//   };
+// }
 
 // function decodeBase64(s: string) {
 //   return Buffer.from(s, 'base64').toString('utf8');

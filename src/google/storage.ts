@@ -4,10 +4,11 @@ import { config } from '../config';
 
 const storage = new Storage({ keyFilename: config.googleAuthFile });
 
-export async function save(content: string | Buffer, fileName: string) {
+export async function save(content: string | Buffer, fileName: string, cacheControl?: string) {
   logger.log(`Saving file: ${getInternalUrl(fileName)}`);
   const file = storage.bucket(config.googleBucket).file(fileName);
   await file.save(content);
+  if (cacheControl) await file.setMetadata({ cacheControl });
   return file.publicUrl();
 }
 

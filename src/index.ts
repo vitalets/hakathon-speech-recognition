@@ -5,21 +5,27 @@ import { startRecognition, checkOperation } from './google/speech';
 import { exportToDoc } from './export';
 import { ReqInfo } from './serverless/types';
 
-const routes = [
+interface Route {
+  method: string;
+  action: string;
+  handler: (query: ReqInfo['query']) => Promise<Record<string, unknown>>;
+}
+
+const routes: Route[] = [
   {
     method: 'POST',
     action: 'recognize',
-    handler: (query: ReqInfo['query']) => startRecognition(query.file)
+    handler: query => startRecognition(query.file)
   },
   {
     method: 'GET',
     action: 'check',
-    handler: (query: ReqInfo['query']) => checkOperation(query.operationId)
+    handler: query => checkOperation(query.operationId)
   },
   {
     method: 'POST',
     action: 'export',
-    handler: (query: ReqInfo['query']) => exportToDoc(query.file)
+    handler: query => exportToDoc(query.file)
   },
 ];
 
