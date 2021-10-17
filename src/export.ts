@@ -10,7 +10,7 @@ import {
   ExternalHyperlink,
   ParagraphChild,
 } from 'docx';
-import { replaceFileExtension } from './utils';
+import { replaceFileExtension, upperFirstLetter } from './utils';
 import * as storage from './google/storage';
 
 type IWordInfo = google.cloud.speech.v1p1beta1.IWordInfo;
@@ -58,10 +58,29 @@ function buildSpeakerHeader(speakerTag: number) {
 
 function buildParagraph(words: IWordInfo[]) {
   const children: ParagraphChild[] = [];
+  // eslint-disable-next-line complexity, max-statements
   words.forEach((wordInfo, i) => {
-    if (i > 0) children.push(new TextRun({ text: ' ' }));
     const confidence = wordInfo.confidence || 1;
-    const text = wordInfo.word || '';
+    let text = wordInfo.word || '';
+    if (i === 0) {
+      text = upperFirstLetter(text);
+    } else {
+      const prevWord = words[i - 1]?.word || '';
+      if (/\.$/.test(prevWord)) {
+        text = upperFirstLetter(text);
+        children.push(new TextRun({ text: '', break: 2 }));
+      } else {
+        const pause = calcPause(words, i);
+        // eslint-disable-next-line max-depth
+        if (pause >= 1) {
+          text = upperFirstLetter(text);
+          children.push(new TextRun({ text: '.' }));
+          children.push(new TextRun({ text: '', break: 2 }));
+        } else {
+          children.push(new TextRun({ text: ' ' }));
+        }
+      }
+    }
     const child = confidence > MIN_CONFIDENCE
       ? new TextRun({ text })
       : buildMarkedText(text, wordInfo);
@@ -69,7 +88,9 @@ function buildParagraph(words: IWordInfo[]) {
   });
   return new Paragraph({
     children,
-    alignment: AlignmentType.JUSTIFIED,
+    // see: https://github.com/dolanmiu/docx/discussions/1033
+    // alignment: AlignmentType.JUSTIFIED,
+    alignment: AlignmentType.LEFT,
   });
 }
 
@@ -113,4 +134,12 @@ function buildSpeakerBlocks(words: IWordInfo[]) {
   }
   if (curSpeakerBlock) result.push(curSpeakerBlock);
   return result;
+}
+
+function calcPause(words: IWordInfo[], index: number) {
+  return getSeconds(words[index].startTime) - getSeconds(words[index - 1].endTime);
+}
+
+function getSeconds(time: IWordInfo['startTime']) {
+  return Number(time?.seconds || '0') + (time?.nanos || 0) / 1000000000;
 }
