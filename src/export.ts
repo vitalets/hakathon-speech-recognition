@@ -9,7 +9,10 @@ import {
   ShadingType,
   ExternalHyperlink,
   ParagraphChild,
+  XmlComponent,
+  OnOffElement,
 } from 'docx';
+
 import { replaceFileExtension, upperFirstLetter } from './utils';
 import * as storage from './google/storage';
 
@@ -46,6 +49,7 @@ function buildDocx(blocks: SpeakerBlock[]) {
   const doc = new Document({
     sections: [{ children }]
   });
+  doc.Settings.addChildElement(new DoNotExpandShiftReturn());
   return Packer.toBuffer(doc);
 }
 
@@ -88,9 +92,7 @@ function buildParagraph(words: IWordInfo[]) {
   });
   return new Paragraph({
     children,
-    // see: https://github.com/dolanmiu/docx/discussions/1033
-    // alignment: AlignmentType.JUSTIFIED,
-    alignment: AlignmentType.LEFT,
+    alignment: AlignmentType.JUSTIFIED,
   });
 }
 
@@ -142,4 +144,12 @@ function calcPause(words: IWordInfo[], index: number) {
 
 function getSeconds(time: IWordInfo['startTime']) {
   return Number(time?.seconds || '0') + (time?.nanos || 0) / 1000000000;
+}
+
+// see: https://github.com/dolanmiu/docx/discussions/1033
+class DoNotExpandShiftReturn extends XmlComponent {
+  constructor() {
+    super('w:compat');
+    this.root.push(new OnOffElement('w:doNotExpandShiftReturn', true));
+  }
 }
