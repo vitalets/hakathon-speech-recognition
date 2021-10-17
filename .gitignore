@@ -13,3 +13,4 @@ npm-debug.log
 /logs
 /data
 /scripts/check.ts
+/scripts/strip-punctuation.ts
