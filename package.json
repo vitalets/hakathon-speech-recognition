@@ -9,7 +9,7 @@
     "test:l": "LOG_LEVEL=info npm t",
     "check": "ts-node scripts/check",
     "build": "rm -rf dist && tsc -p tsconfig.build.json",
-    "deploy": "npm run lint && npmt && npm run build && deploy-fn"
+    "deploy": "npm run lint && npm t && npm run build && deploy-fn"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": "eslint --ext .ts --fix"
