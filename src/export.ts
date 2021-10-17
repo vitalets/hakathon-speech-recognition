@@ -85,7 +85,7 @@ function buildMarkedText(text: string, wordInfo: IWordInfo) {
         // style: 'Hyperlink'
       }),
     ],
-    link: `https://example.com?t=${wordInfo.startTime}`,
+    link: `https://example.com?t=${wordInfo.startTime?.seconds || 0}`,
   });
   // return new TextRun({
   //   text,
