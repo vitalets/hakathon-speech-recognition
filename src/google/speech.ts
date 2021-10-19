@@ -74,5 +74,5 @@ async function saveResult(result: ILongRunningRecognizeResponse, uri: string) {
   const fileName = replaceFileExtension(path.basename(uri), '.json');
   return config.googleUseMocks
     ? mock.getResultPublicUrl()
-    : storage.save(content, fileName);
+    : storage.save(content, fileName, 'no-cache');
 }
