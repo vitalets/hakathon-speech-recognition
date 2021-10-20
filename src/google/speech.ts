@@ -2,6 +2,7 @@
  * Examples:
  * https://github.com/googleapis/nodejs-speech/blob/main/samples/betaFeatures.js
  */
+// import fs from 'fs';
 import path from 'path';
 import { v1p1beta1 } from '@google-cloud/speech';
 import { google } from '@google-cloud/speech/build/protos/protos';
@@ -10,6 +11,8 @@ import { config } from '../config';
 import * as mock from './mock';
 import * as storage from './storage';
 import { replaceFileExtension } from '../utils';
+import { improveResult } from '../improve';
+// import { buildDocx } from '../export';
 
 const { AudioEncoding } = google.cloud.speech.v1p1beta1.RecognitionConfig;
 type ILongRunningRecognizeResponse = google.cloud.speech.v1p1beta1.ILongRunningRecognizeResponse;
@@ -24,10 +27,11 @@ const client = new v1p1beta1.SpeechClient({ keyFilename: config.googleAuthFile }
 export async function startRecognition(fileName: string) {
   if (!fileName) throw new Error(`Empty file`);
   const inputConfig = buildRecognitionConfig();
-  const outputConfig = buildOutputConfig(fileName);
   const uri = storage.getInternalUrl(fileName);
   const audio = { uri };
-  const request = { audio, config: inputConfig, outputConfig };
+  // dont use outputConfig, because it saves times not in protobuf.Duration!
+  // { seconds: "6", nanos: 200000000 } -> "6.200s"
+  const request = { audio, config: inputConfig };
   logger.log(`Starting recognize: ${uri}`);
   const [ operation ] = config.googleUseMocks
     ? await mock.longRunningRecognize()
@@ -67,19 +71,28 @@ function buildRecognitionConfig() {
   };
 }
 
-function buildOutputConfig(fileName: string) {
-  const rawResultFileName = replaceFileExtension(fileName, ' (orig).json');
-  const gcsUri = storage.getInternalUrl(rawResultFileName);
-  return { gcsUri };
-}
-
 async function saveResult(result: ILongRunningRecognizeResponse, uri: string) {
   // Use last result (as it contains speakers)
   // See: https://github.com/googleapis/nodejs-speech/blob/b775dd15ba3a8fec8f86edfc5a4a95def452e65e/samples/betaFeatures.js#L115
-  const words = result.results?.pop()?.alternatives![0].words;
-  const content = JSON.stringify(words, null, 2);
-  const fileName = replaceFileExtension(path.basename(uri), '.json');
-  return config.googleUseMocks
-    ? mock.getResultPublicUrl()
-    : storage.save(content, fileName, 'no-cache');
+  const lastResult = result.results![result.results!.length - 1];
+  const words = lastResult.alternatives?.[0]?.words || [];
+  const improvedWords = await improveResult(words);
+  if (config.googleUseMocks) {
+    // temp: для тестов на check всегда сохраняем docx
+    // const buffer = await buildDocx(improvedWords);
+    // await fs.promises.writeFile('data/test.docx', buffer);
+    // await saveFile(improvedWords, mock.getResultPublicUrl(), '.json');
+    return mock.getResultPublicUrl();
+  }
+  const [ resultUrl ] = await Promise.all([
+    saveFile(improvedWords, uri, '.json'),
+    saveFile(result, uri, ' (orig).json'),
+  ]);
+  return resultUrl;
+}
+
+async function saveFile(json: unknown, uri: string, ext: string) {
+  const content = JSON.stringify(json, null, 2);
+  const fileName = replaceFileExtension(path.basename(uri), ext);
+  return storage.save(content, fileName, 'no-cache');
 }

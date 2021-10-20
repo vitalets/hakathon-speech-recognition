@@ -22,7 +22,7 @@ export async function checkLongRunningRecognizeProgress(operationId: string) {
     error: null,
     metadata: {
       progressPercent,
-      uri: ''
+      uri: getResultPublicUrl(),
     },
     result,
   };

@@ -28,18 +28,13 @@ export interface SpeakerBlock {
 export async function exportToDoc(fileName: string) {
   const content = await storage.download(replaceFileExtension(fileName, '.json'));
   const words = JSON.parse(content);
-  const blocks = buildSpeakerBlocks(words);
-  const buffer = await buildDocx(blocks);
-  // return { buffer, fileName: replaceFileExtension(fileName, '.docx') };
+  const buffer = await buildDocx(words);
   const url = await storage.save(buffer, replaceFileExtension(fileName, '.docx'), 'no-cache');
   return { url };
 }
 
-// function buildTxt(blocks: SpeakerBlock[]) {
-//   return blocks.map(({ speakerTag, words }) => `[спикер ${speakerTag}]\n\n${words.join(' ')}`).join('\n\n');
-// }
-
-function buildDocx(blocks: SpeakerBlock[]) {
+export function buildDocx(words: IWordInfo[]) {
+  const blocks = buildSpeakerBlocks(words);
   const children: Paragraph [] = [];
   blocks.forEach(({ speakerTag, words }) => {
     const speakerHeader = buildSpeakerHeader(speakerTag);
@@ -71,18 +66,9 @@ function buildParagraph(words: IWordInfo[]) {
     } else {
       const prevWord = words[i - 1]?.word || '';
       if (/\.$/.test(prevWord)) {
-        text = upperFirstLetter(text);
         children.push(new TextRun({ text: '', break: 2 }));
       } else {
-        const pause = calcPause(words, i);
-        // eslint-disable-next-line max-depth
-        if (pause >= 1) {
-          text = upperFirstLetter(text);
-          children.push(new TextRun({ text: '.' }));
-          children.push(new TextRun({ text: '', break: 2 }));
-        } else {
-          children.push(new TextRun({ text: ' ' }));
-        }
+        children.push(new TextRun({ text: ' ' }));
       }
     }
     const child = confidence > MIN_CONFIDENCE
@@ -120,7 +106,7 @@ function buildMarkedText(text: string, wordInfo: IWordInfo) {
 }
 
 // eslint-disable-next-line complexity, max-statements
-function buildSpeakerBlocks(words: IWordInfo[]) {
+export function buildSpeakerBlocks(words: IWordInfo[]) {
   const result: SpeakerBlock[] = [];
   let curSpeakerBlock: SpeakerBlock | undefined;
   for (const wordInfo of words) {
@@ -136,14 +122,6 @@ function buildSpeakerBlocks(words: IWordInfo[]) {
   }
   if (curSpeakerBlock) result.push(curSpeakerBlock);
   return result;
-}
-
-function calcPause(words: IWordInfo[], index: number) {
-  return getSeconds(words[index].startTime) - getSeconds(words[index - 1].endTime);
-}
-
-function getSeconds(time: IWordInfo['startTime']) {
-  return Number(time?.seconds || '0') + (time?.nanos || 0) / 1000000000;
 }
 
 // see: https://github.com/dolanmiu/docx/discussions/1033

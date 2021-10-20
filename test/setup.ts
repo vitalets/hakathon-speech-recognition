@@ -1,3 +1,5 @@
+/// <reference types="../src/externals" />
+
 process.env.LOG_LEVEL = process.env.LOG_LEVEL || 'warn';
 
 import assert from 'assert';
