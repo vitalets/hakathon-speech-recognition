@@ -24,9 +24,10 @@ const client = new v1p1beta1.SpeechClient({ keyFilename: config.googleAuthFile }
 export async function startRecognition(fileName: string) {
   if (!fileName) throw new Error(`Empty file`);
   const inputConfig = buildRecognitionConfig();
+  const outputConfig = buildOutputConfig(fileName);
   const uri = storage.getInternalUrl(fileName);
   const audio = { uri };
-  const request = { audio, config: inputConfig };
+  const request = { audio, config: inputConfig, outputConfig };
   logger.log(`Starting recognize: ${uri}`);
   const [ operation ] = config.googleUseMocks
     ? await mock.longRunningRecognize()
@@ -64,6 +65,12 @@ function buildRecognitionConfig() {
     enableSpeakerDiarization: true,
     enableWordConfidence: true,
   };
+}
+
+function buildOutputConfig(fileName: string) {
+  const rawResultFileName = replaceFileExtension(fileName, ' (orig).json');
+  const gcsUri = storage.getInternalUrl(rawResultFileName);
+  return { gcsUri };
 }
 
 async function saveResult(result: ILongRunningRecognizeResponse, uri: string) {
