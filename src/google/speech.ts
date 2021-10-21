@@ -78,9 +78,10 @@ async function saveResult(result: ILongRunningRecognizeResponse, uri: string) {
   const words = lastResult.alternatives?.[0]?.words || [];
   const improvedWords = await improveResult(words);
   if (config.googleUseMocks) {
-    // temp: для тестов на check всегда сохраняем docx
+    // dev: для тестов на check всегда сохраняем docx
     // const buffer = await buildDocx(improvedWords);
     // await fs.promises.writeFile('data/test.docx', buffer);
+    // dev: update main testing json in storage
     // await saveFile(improvedWords, mock.getResultPublicUrl(), '.json');
     return mock.getResultPublicUrl();
   }

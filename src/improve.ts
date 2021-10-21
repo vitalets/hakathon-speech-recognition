@@ -24,13 +24,20 @@ export async function improveResult(words: IWordInfo[]) {
 
 /**
  * Если фраза спикера короткая, то цепляем ее к предыдущему спикеру.
+ * Или если речь предыдущего спикера закончилась на предлоге.
  */
 function mergeShortSpeakerPhrase(words: IWordInfo[]) {
+  const MIN_SPEAKER_PHRASE = 11;
   const speakerBlocks = buildSpeakerBlocks(words);
   const result = speakerBlocks[0].words.slice();
   for (let i = 1; i < speakerBlocks.length; i++) {
     const prevSpeakerTag = result[result.length - 1]?.speakerTag || undefined;
-    const words = prevSpeakerTag !== undefined && speakerBlocks[i].words.length <= 8
+    const prevWord = result[result.length - 1]?.word;
+    const shouldMerge = prevSpeakerTag !== undefined && [
+      speakerBlocks[i].words.length < MIN_SPEAKER_PHRASE,
+      prevWord && prevWord?.length <= 2,
+    ].some(Boolean);
+    const words = shouldMerge
       ? speakerBlocks[i].words.map(word => ({ ...word, speakerTag: prevSpeakerTag }))
       : speakerBlocks[i].words;
     result.push(...words);
@@ -81,10 +88,11 @@ function addCommas(words: IWordInfo[]) {
 }
 
 function addDotsByPause(words: IWordInfo[]) {
+  const MIN_PAUSE = 2; // seconds
   for (let i = 1; i < words.length; i++) {
     const prev = words[i - 1];
     const pause = calcPause(words, i);
-    if (pause >= 1 && endsWithLetter(prev.word)) {
+    if (pause >= MIN_PAUSE && endsWithLetter(prev.word)) {
       prev.word = `${prev.word}.`;
     }
   }
