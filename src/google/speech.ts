@@ -85,7 +85,7 @@ async function saveResult(result: ILongRunningRecognizeResponse, uri: string) {
     // const buffer = await buildDocx(improvedWords);
     // await fs.promises.writeFile('data/test.docx', buffer);
     // dev: save improved json to storage
-    //await saveFile(improvedWords, mock.getResultPublicUrl(), '.json');
+    // await saveFile(improvedWords, mock.getResultPublicUrl(), '.json');
     // dev: save improved json to disk
     // await fs.promises.writeFile('data/words.json', JSON.stringify(improvedWords, null, 2));
     return mock.getResultPublicUrl();

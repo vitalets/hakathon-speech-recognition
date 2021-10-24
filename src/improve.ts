@@ -15,6 +15,7 @@ type IWordInfo = google.cloud.speech.v1p1beta1.IWordInfo;
 let initAzPromise: Promise<unknown> | undefined;
 
 export async function improveResult(words: IWordInfo[]) {
+  // words = words.slice(0, 2100);
   words = removeWasteWords(words);
   words = removeDuplicates(words);
   words = await restorePunct(words);
@@ -24,6 +25,7 @@ export async function improveResult(words: IWordInfo[]) {
   // words = addDotsByPause(words);
   words = upperCaseAfterDot(words);
   words = lowerCaseAfterComma(words);
+  words = insertLastDot(words);
   return words;
 }
 
@@ -126,15 +128,23 @@ function lowerCaseAfterComma(words: IWordInfo[]) {
   return words;
 }
 
+function insertLastDot(words: IWordInfo[]) {
+  const lastWord = words[words.length - 1];
+  if (endsWithLetter(lastWord.word)) {
+    lastWord.word = `${lastWord.word}.`;
+  }
+  return words;
+}
+
 /**
  * Удаляем "-", т.к. это мешает потом сопоставлять слова
  */
 function removeWasteWords(words: IWordInfo[]) {
-  return words.filter(w => w.word !== '-');
+  return words.filter(w => w.word && w.word !== '-');
 }
 
 function endsWithLetter(word?: string | null): word is string {
-  return typeof word === 'string' && /[^.,?]$/i.test(word);
+  return typeof word === 'string' && /[^.,?!-]$/i.test(word);
 }
 
 function calcPause(words: IWordInfo[], index: number) {
