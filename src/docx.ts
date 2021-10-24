@@ -19,7 +19,7 @@ import * as storage from './google/storage';
 type IWordInfo = google.cloud.speech.v1p1beta1.IWordInfo;
 
 const MIN_CONFIDENCE = 0.65;
-const PLAYER_URL = 'https://mikavanko.github.io/hackathon/dist/player?file={file}&t={time}';
+const PLAYER_URL = 'https://mikavanko.github.io/hackathon/dist/#/player?file={file}&t={time}';
 
 export interface SpeakerBlock {
   speakerTag: number;
