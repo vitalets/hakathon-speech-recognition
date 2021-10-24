@@ -2,7 +2,10 @@
  * Examples:
  * https://github.com/googleapis/nodejs-speech/blob/main/samples/betaFeatures.js
  */
-// import fs from 'fs';
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import fs from 'fs';
 import path from 'path';
 import { v1p1beta1 } from '@google-cloud/speech';
 import { google } from '@google-cloud/speech/build/protos/protos';
@@ -12,7 +15,7 @@ import * as mock from './mock';
 import * as storage from './storage';
 import { replaceFileExtension } from '../utils';
 import { improveResult } from '../improve';
-// import { buildDocx } from '../export';
+import { buildDocx } from '../export';
 
 const { AudioEncoding } = google.cloud.speech.v1p1beta1.RecognitionConfig;
 type ILongRunningRecognizeResponse = google.cloud.speech.v1p1beta1.ILongRunningRecognizeResponse;
@@ -81,8 +84,10 @@ async function saveResult(result: ILongRunningRecognizeResponse, uri: string) {
     // dev: для тестов на check всегда сохраняем docx
     // const buffer = await buildDocx(improvedWords);
     // await fs.promises.writeFile('data/test.docx', buffer);
-    // dev: update main testing json in storage
-    // await saveFile(improvedWords, mock.getResultPublicUrl(), '.json');
+    // dev: save improved json to storage
+    //await saveFile(improvedWords, mock.getResultPublicUrl(), '.json');
+    // dev: save improved json to disk
+    // await fs.promises.writeFile('data/words.json', JSON.stringify(improvedWords, null, 2));
     return mock.getResultPublicUrl();
   }
   const [ resultUrl ] = await Promise.all([
