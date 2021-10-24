@@ -49,7 +49,7 @@ export async function startRecognition(fileName: string) {
  * See: https://github.com/googleapis/gax-nodejs/blob/main/client-libraries.md#long-running-operations
  */
 export async function checkOperation(operationId: string) {
-  if (!operationId) throw new Error(`Empty operationId`);
+  if (!operationId || operationId === 'null' || operationId === 'undefined') throw new Error(`Empty operationId`);
   logger.log(`Checking operation: ${operationId}`);
   const { done, result, error, metadata } = config.googleUseMocks
     ? await mock.checkLongRunningRecognizeProgress(operationId)

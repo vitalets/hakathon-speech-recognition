@@ -14,7 +14,7 @@ env:
 rules:
   indent: [error, 2, { SwitchCase: 1 }]
   no-console: error
-  complexity: [error, { max: 6 }]
+  # complexity: [error, { max: 6 }]
   max-depth: [error, { max: 2 }]
   max-nested-callbacks: [error, { max: 2 }]
   max-params: [error, { max: 5 }]
