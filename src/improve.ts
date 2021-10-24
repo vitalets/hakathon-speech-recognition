@@ -18,9 +18,9 @@ export async function improveResult(words: IWordInfo[]) {
   // words = words.slice(0, 2100);
   words = removeWasteWords(words);
   words = removeDuplicates(words);
+  words = mergeShortSpeakerPhrase(words);
   words = await restorePunct(words);
   words = await upperCaseOrganizations(words);
-  words = mergeShortSpeakerPhrase(words);
   // words = addCommas(words);
   // words = addDotsByPause(words);
   words = upperCaseAfterDot(words);
