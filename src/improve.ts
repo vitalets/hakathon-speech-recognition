@@ -6,7 +6,7 @@
 
 import { google } from '@google-cloud/speech/build/protos/protos';
 import Az from 'az';
-import { buildSpeakerBlocks } from './export';
+import { buildSpeakerBlocks } from './docx';
 import { lowerFirstLetter, upperFirstLetter } from './utils';
 import { restorePunct } from './improve-punct';
 

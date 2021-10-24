@@ -2,7 +2,7 @@
  * Logic entry
  */
 import { startRecognition, checkOperation } from './google/speech';
-import { exportToDoc } from './export';
+import { exportToDoc } from './docx';
 import { ReqInfo } from './serverless/types';
 
 interface Route {

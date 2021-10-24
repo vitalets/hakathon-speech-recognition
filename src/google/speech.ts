@@ -15,7 +15,7 @@ import * as mock from './mock';
 import * as storage from './storage';
 import { replaceFileExtension } from '../utils';
 import { improveResult } from '../improve';
-import { buildDocx } from '../export';
+import { buildDocx } from '../docx';
 
 const { AudioEncoding } = google.cloud.speech.v1p1beta1.RecognitionConfig;
 type ILongRunningRecognizeResponse = google.cloud.speech.v1p1beta1.ILongRunningRecognizeResponse;
