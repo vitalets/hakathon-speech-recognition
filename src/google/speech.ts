@@ -54,9 +54,9 @@ export async function checkOperation(operationId: string) {
   const { done, result, error, metadata } = config.googleUseMocks
     ? await mock.checkLongRunningRecognizeProgress(operationId)
     : await client.checkLongRunningRecognizeProgress(operationId);
-  logger.log(`Operation status: ${JSON.stringify({ done, error })}`);
-  if (error) throw new Error(error.message);
   const { uri, progressPercent: percent } = metadata as ILongRunningRecognizeMetadata;
+  logger.log(`Operation status: ${JSON.stringify({ done, error, uri, percent })}`);
+  if (error) throw new Error(error.message);
   const { resultUrl = '', docxUrl = '' } = done
     ? await saveResult(result as ILongRunningRecognizeResponse, uri!)
     : {};
@@ -79,8 +79,9 @@ function buildRecognitionConfig() {
 async function saveResult(result: ILongRunningRecognizeResponse, uri: string) {
   // Use last result (as it contains speakers)
   // See: https://github.com/googleapis/nodejs-speech/blob/b775dd15ba3a8fec8f86edfc5a4a95def452e65e/samples/betaFeatures.js#L115
-  const lastResult = result.results![result.results!.length - 1];
-  const words = lastResult.alternatives?.[0]?.words || [];
+  const lastResult = result.results?.[result.results?.length - 1];
+  const words = lastResult?.alternatives?.[0]?.words || [];
+  if (words.length === 0) throw new Error('Ничего не распознанно.');
   const improvedWords = await improveResult(words);
   if (config.googleUseMocks) {
     // dev: для тестов на check всегда сохраняем docx
