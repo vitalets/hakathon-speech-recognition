@@ -19,6 +19,7 @@ import * as storage from './google/storage';
 type IWordInfo = google.cloud.speech.v1p1beta1.IWordInfo;
 
 const MIN_CONFIDENCE = 0.65;
+const PLAYER_URL = 'https://mikavanko.github.io/hackathon/dist/player?file={file}&t={time}';
 
 export interface SpeakerBlock {
   speakerTag: number;
@@ -30,16 +31,18 @@ export async function exportToDoc(fileName: string, words?: IWordInfo[]) {
     const content = await storage.download(replaceFileExtension(fileName, '.json'));
     words = JSON.parse(content) as IWordInfo[];
   }
-  const buffer = await buildDocx(words);
+  // todo: make class to not pull playerUrl through all functions
+  const playerUrl = PLAYER_URL.replace('{file}', encodeURIComponent(replaceFileExtension(fileName, '.mp3')));
+  const buffer = await buildDocx(words, playerUrl);
   return storage.save(buffer, replaceFileExtension(fileName, '.docx'), 'no-cache');
 }
 
-export function buildDocx(words: IWordInfo[]) {
+export function buildDocx(words: IWordInfo[], playerUrl: string) {
   const blocks = buildSpeakerBlocks(words);
   const children: Paragraph [] = [];
   blocks.forEach(({ speakerTag, words }) => {
     const speakerHeader = buildSpeakerHeader(speakerTag);
-    const paragraph = buildParagraph(words);
+    const paragraph = buildParagraph(words, playerUrl);
     children.push(speakerHeader, paragraph);
   });
   const doc = new Document({
@@ -56,7 +59,7 @@ function buildSpeakerHeader(speakerTag: number) {
   });
 }
 
-function buildParagraph(words: IWordInfo[]) {
+function buildParagraph(words: IWordInfo[], playerUrl: string) {
   const children: ParagraphChild[] = [];
   // eslint-disable-next-line complexity, max-statements
   words.forEach((wordInfo, i) => {
@@ -74,7 +77,7 @@ function buildParagraph(words: IWordInfo[]) {
     }
     const child = confidence > MIN_CONFIDENCE
       ? new TextRun({ text })
-      : buildMarkedText(text, wordInfo);
+      : buildMarkedText(text, wordInfo, playerUrl);
     children.push(child);
   });
   return new Paragraph({
@@ -83,7 +86,7 @@ function buildParagraph(words: IWordInfo[]) {
   });
 }
 
-function buildMarkedText(text: string, wordInfo: IWordInfo) {
+function buildMarkedText(text: string, wordInfo: IWordInfo, playerUrl: string) {
   return new ExternalHyperlink({
     children: [
       new TextRun({
@@ -95,7 +98,7 @@ function buildMarkedText(text: string, wordInfo: IWordInfo) {
         // style: 'Hyperlink'
       }),
     ],
-    link: `https://example.com?t=${wordInfo.startTime?.seconds || 0}`,
+    link: playerUrl.replace('{time}', String(wordInfo.startTime?.seconds || 0)),
   });
   // return new TextRun({
   //   text,
