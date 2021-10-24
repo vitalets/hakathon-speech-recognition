@@ -25,7 +25,10 @@ const routes: Route[] = [
   {
     method: 'POST',
     action: 'export',
-    handler: query => exportToDoc(query.file)
+    handler: async query => {
+      const url = await exportToDoc(query.file);
+      return { url };
+    }
   },
 ];
 

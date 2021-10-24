@@ -15,7 +15,7 @@ import * as mock from './mock';
 import * as storage from './storage';
 import { replaceFileExtension } from '../utils';
 import { improveResult } from '../improve';
-import { buildDocx } from '../docx';
+import { buildDocx, exportToDoc } from '../docx';
 
 const { AudioEncoding } = google.cloud.speech.v1p1beta1.RecognitionConfig;
 type ILongRunningRecognizeResponse = google.cloud.speech.v1p1beta1.ILongRunningRecognizeResponse;
@@ -57,8 +57,10 @@ export async function checkOperation(operationId: string) {
   logger.log(`Operation status: ${JSON.stringify({ done, error })}`);
   if (error) throw new Error(error.message);
   const { uri, progressPercent: percent } = metadata as ILongRunningRecognizeMetadata;
-  const resultUrl = done ? await saveResult(result as ILongRunningRecognizeResponse, uri!) : '';
-  return { done, percent, resultUrl };
+  const { resultUrl = '', docxUrl = '' } = done
+    ? await saveResult(result as ILongRunningRecognizeResponse, uri!)
+    : {};
+  return { done, percent, resultUrl, docxUrl };
 }
 
 function buildRecognitionConfig() {
@@ -88,13 +90,16 @@ async function saveResult(result: ILongRunningRecognizeResponse, uri: string) {
     // await saveFile(improvedWords, mock.getResultPublicUrl(), '.json');
     // dev: save improved json to disk
     // await fs.promises.writeFile('data/words.json', JSON.stringify(improvedWords, null, 2));
-    return mock.getResultPublicUrl();
+    const resultUrl = mock.getResultPublicUrl();
+    const docxUrl = replaceFileExtension(resultUrl, '.docx');
+    return { resultUrl, docxUrl };
   }
-  const [ resultUrl ] = await Promise.all([
+  const [ resultUrl, docxUrl ] = await Promise.all([
     saveFile(improvedWords, uri, '.json'),
+    exportToDoc(path.basename(uri), improvedWords),
     saveFile(result, uri, ' (orig).json'),
   ]);
-  return resultUrl;
+  return { resultUrl, docxUrl } ;
 }
 
 async function saveFile(json: unknown, uri: string, ext: string) {

@@ -13,6 +13,8 @@ describe('invoke', () => {
   it.skip('check operation (done)', async () => {
     const body = await callHandler('GET', { action: 'check', operationId: '123' });
     assert.deepEqual(body.done, true);
+    assert.match(body.resultUrl, /http.+/);
+    assert.match(body.docxUrl, /http.+/);
   });
 
 });

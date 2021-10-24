@@ -25,12 +25,13 @@ export interface SpeakerBlock {
   words: IWordInfo[];
 }
 
-export async function exportToDoc(fileName: string) {
-  const content = await storage.download(replaceFileExtension(fileName, '.json'));
-  const words = JSON.parse(content);
+export async function exportToDoc(fileName: string, words?: IWordInfo[]) {
+  if (!words) {
+    const content = await storage.download(replaceFileExtension(fileName, '.json'));
+    words = JSON.parse(content) as IWordInfo[];
+  }
   const buffer = await buildDocx(words);
-  const url = await storage.save(buffer, replaceFileExtension(fileName, '.docx'), 'no-cache');
-  return { url };
+  return storage.save(buffer, replaceFileExtension(fileName, '.docx'), 'no-cache');
 }
 
 export function buildDocx(words: IWordInfo[]) {
