@@ -1,15 +1,12 @@
-const env = require('./.env');
-
 module.exports = {
-  oauthToken: env.YC_OAUTH_TOKEN,
-  folderId: env.YC_FOLDER_ID,
+  authKeyFile: '.auth.yandex.json',
   functionName: 'hakathon-recognition',
   deploy: {
-    files: [ 'package*.json', 'dist/**', '.env.google.json' ],
+    files: [ 'package*.json', 'dist/**', '.auth.google.json' ],
     handler: 'dist/serverless/index.handler',
-    runtime: 'nodejs16-preview',
+    runtime: 'nodejs16',
     timeout: 30,
-    memory: 128,
+    memory: 256,
     environment: {
       NODE_ENV: 'production',
     },
