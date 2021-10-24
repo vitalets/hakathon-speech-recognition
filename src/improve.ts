@@ -17,7 +17,7 @@ let initAzPromise: Promise<unknown> | undefined;
 export async function improveResult(words: IWordInfo[]) {
   words = removeWasteWords(words);
   words = removeDuplicates(words);
-  // words = await restorePunct(words);
+  words = await restorePunct(words);
   words = await upperCaseOrganizations(words);
   words = mergeShortSpeakerPhrase(words);
   // words = addCommas(words);

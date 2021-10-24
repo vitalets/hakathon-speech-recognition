@@ -1,19 +1,14 @@
-/*
-curl -X 'POST' \
-  'http://punct.toys.dialogic.digital/restore-punct' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{"text": "Привет как дела"}'
-*/
-
+/**
+ * Restore punctuation service.
+ */
 import fetch from 'node-fetch';
 import { google } from '@google-cloud/speech/build/protos/protos';
 import { splitOnChunks } from './utils';
 import { logger } from './logger';
+import { config } from './config';
 
 type IWordInfo = google.cloud.speech.v1p1beta1.IWordInfo;
 
-const PUNCT_API_URL = 'http://punct.toys.dialogic.digital/restore-punct';
 const PUNCT_API_CHUNKS = 5;
 
 export async function restorePunct(words: IWordInfo[]) {
@@ -30,7 +25,7 @@ async function restorePunctChunk(words: IWordInfo[]) {
   const headers = { 'Content-Type': 'application/json' };
   const method = 'post';
   const body = JSON.stringify({ text });
-  const res = await fetch(PUNCT_API_URL, { method, headers, body });
+  const res = await fetch(config.punctuationApi, { method, headers, body });
   if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);
   const { restored } = await res.json() as { restored: string };
   return restored
