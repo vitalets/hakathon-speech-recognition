@@ -1,43 +1,42 @@
 /**
- * Logic entry
+ * Serverless function invoke.
  */
-import { startRecognition, checkOperation } from './google/speech';
-import { exportToDoc } from './docx';
-import { ReqInfo } from './serverless/types';
+import { Handler, HttpRequest, sendJson, Context } from 'yandex-cloud-fn';
+import { handleRequest } from './routes';
+import { logger } from './logger';
 
-interface Route {
+export interface ReqInfo {
+  requestId: string;
+  version: string;
   method: string;
-  action: string;
-  handler: (query: ReqInfo['query']) => Promise<Record<string, unknown>>;
+  query: Record<string, string>;
+  iamToken: string;
 }
 
-const routes: Route[] = [
-  {
-    method: 'POST',
-    action: 'recognize',
-    handler: query => startRecognition(query.file)
-  },
-  {
-    method: 'GET',
-    action: 'check',
-    handler: query => checkOperation(query.operationId)
-  },
-  {
-    method: 'POST',
-    action: 'export',
-    handler: async query => {
-      const url = await exportToDoc(query.file);
-      return { url };
-    }
-  },
-];
+export const handler: Handler<HttpRequest> = async (event, context) => {
+  const reqInfo = getRequestInfo(event, context);
+  logRequest(reqInfo);
+  const resBody = await handleRequest(reqInfo);
+  logResponse(resBody);
+  return sendJson(resBody);
+};
 
-export async function handleRequest({ method, query }: ReqInfo) {
-  const { action } = query;
-  for (const route of routes) {
-    if (route.method === method && route.action === action) {
-      return route.handler(query);
-    }
-  }
-  throw new Error(`No route for: method=${method} action=${action}`);
+function getRequestInfo(event: HttpRequest, context: Context): ReqInfo {
+  const query = event.queryStringParameters || {};
+  const { requestId, token, functionVersion } = context;
+  return {
+    requestId,
+    version: functionVersion,
+    method: event.httpMethod,
+    query,
+    iamToken: token?.access_token || '',
+  };
+}
+
+function logRequest(reqInfo: ReqInfo) {
+  logger.log(`REQUEST: ${JSON.stringify(reqInfo)}`);
+}
+
+function logResponse(resBody: unknown) {
+  logger.log(`RESPONSE: ${JSON.stringify(resBody).substr(0, 150)}`);
 }

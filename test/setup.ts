@@ -4,7 +4,7 @@ process.env.LOG_LEVEL = process.env.LOG_LEVEL || 'warn';
 
 import assert from 'assert';
 import { config } from '../src/config';
-import { handler } from '../src/serverless';
+import { handler } from '../src';
 
 config.googleUseMocks = true;
 
@@ -30,7 +30,7 @@ async function callHandler(
     queryStringParameters,
     isBase64Encoded: false,
   };
-  const res = await handler(event, {
+  const res = await (handler as any)(event, {
     requestId: 'xxx',
     functionVersion: 'abc',
   });

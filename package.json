@@ -20,7 +20,8 @@
     "az": "^0.2.3",
     "console-log-level": "^1.4.1",
     "content-disposition": "^0.5.3",
-    "docx": "^7.1.2"
+    "docx": "^7.1.2",
+    "yandex-cloud-fn": "^2.0.0"
   },
   "devDependencies": {
     "@types/console-log-level": "^1.4.2",

@@ -3,7 +3,7 @@ module.exports = {
   functionName: 'hakathon-recognition',
   deploy: {
     files: [ 'package*.json', 'dist/**', '.auth.google.json' ],
-    handler: 'dist/serverless/index.handler',
+    handler: 'dist/index.handler',
     runtime: 'nodejs16',
     timeout: 600,
     memory: 256,
