@@ -14,6 +14,7 @@ type IWordInfo = google.cloud.speech.v1p1beta1.IWordInfo;
 const PUNCT_API_CHUNKS = 10;
 
 export async function restorePunct(words: IWordInfo[]) {
+  if (!config.punctuationApi) return words;
   const chunks = splitOnChunks(words, PUNCT_API_CHUNKS);
   logger.log(`Restoring punct (${PUNCT_API_CHUNKS} chunks, per ${chunks[0].length} words)...`);
   const tasks = chunks.map(chunk => restorePunctChunk(chunk));

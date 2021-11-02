@@ -7,6 +7,7 @@ export const config = {
   googleBucket: 'hakathon',
   googleAuthFile: '.auth.google.json',
   googleUseMocks: true,
-  punctuationApi: 'http://84.252.141.1:5000/restore-punct',
+  punctuationApi: '',
+  // punctuationApi: 'http://84.252.141.1:5000/restore-punct',
   logLevel: LOG_LEVEL || 'info',
 };
